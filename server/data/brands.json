@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "code": "acura",
+    "name": "Acura"
+  },
+  {
+    "id": 2,
+    "code": "aito",
+    "name": "Aito"
+  },
+  {
+    "id": 3,
+    "code": "alfaromeo",
+    "name": "Alfa Romeo"
+  },
+  {
+    "id": 4,
+    "code": "aprilia",
+    "name": "Aprilia"
+  },
+  {
+    "id": 5,
+    "code": "arcticcat",
+    "name": "Arctic Cat"
+  },
+  {
+    "id": 6,
+    "code": "asia",
+    "name": "Asia"
+  },
+  {
+    "id": 7,
+    "code": "astonmartin",
+    "name": "Aston Martin"
+  },
+  {
+    "id": 8,
+    "code": "audi",
+    "name": "Audi"
+  },
+  {
+    "id": 9,
+    "code": "austin",
+    "name": "Austin"
+  },
+  {
+    "id": 10,
+    "code": "baic",
+    "name": "BAIC"
+  },
+  {
+    "id": 11,
+    "code": "baw",
+    "name": "BAW"
+  },
+  {
+    "id": 12,
+    "code": "belgee",
+    "name": "Belgee"
+  },
+  {
+    "id": 13,
+    "code": "bentley",
+    "name": "Bentley"
+  },
+  {
+    "id": 14,
+    "code": "beta",
+    "name": "Beta"
+  },
+  {
+    "id": 15,
+    "code": "bmw",
+    "name": "BMW"
+  }
+]

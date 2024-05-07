@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model brand {
+  id          Int           @id
+  name        String        @db.VarChar(255)
+  code        String        @db.VarChar(255)
+  model       model[]
+  spare_parts spare_parts[]
+}
+
+model model {
+  id          Int           @id
+  brand_id    Int
+  name        String        @db.VarChar(255)
+  code        String        @db.VarChar(255)
+  brand       brand         @relation(fields: [brand_id], references: [id], onUpdate: Restrict, map: "model_ibfk_1")
+  spare_parts spare_parts[]
+
+  @@index([brand_id], map: "brand_id")
+}
+
+model spare_parts {
+  id            Int                       @id
+  brand_id      Int
+  model_id      Int
+  title         String                    @db.VarChar(255)
+  category      String?                   @db.VarChar(255)
+  description   String?                   @db.VarChar(255)
+  article       Int
+  img_link      String?                   @db.VarChar(255)
+  spare_id      String?                   @db.VarChar(255)
+  price         Int
+  year          Int                       @db.SmallInt
+  body          spare_parts_body?
+  fuel          spare_parts_fuel?
+  transmission  spare_parts_transmission?
+  engine_volume Int?
+  brand         brand                     @relation(fields: [brand_id], references: [id], onUpdate: Restrict, map: "spare_parts_ibfk_1")
+  model         model                     @relation(fields: [model_id], references: [id], onUpdate: Restrict, map: "spare_parts_ibfk_2")
+
+  @@index([brand_id], map: "brand_id")
+  @@index([model_id], map: "model_id")
+}
+
+enum spare_parts_body {
+  sedan
+  hatchback
+  universal
+  suv
+  minivan
+  coupe
+  liftback
+  pickup
+  convertible
+  van
+  truck
+  flatbed
+  tractor
+  bus
+  trailer
+  semi_trailer
+  forklift
+}
+
+enum spare_parts_fuel {
+  gasoline
+  diesel
+  hybrid
+  electric
+}
+
+enum spare_parts_transmission {
+  automatic
+  manual
+  robotized
+  cvt
+}
