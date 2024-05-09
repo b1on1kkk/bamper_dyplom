@@ -3,8 +3,13 @@ export const initialFilterState = {
   fuel: null,
   brand: null,
   model: null,
+  article: null,
   year_to: null,
+  spare_id: null,
+  price_to: null,
+  category: null,
   year_from: null,
-  spare_part: null,
-  transmission: null
+  price_from: null,
+  transmission: null,
+  engine_volume: null
 };

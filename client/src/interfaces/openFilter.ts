@@ -11,7 +11,7 @@ export interface FilterOpenState {
   brand: boolean;
   model: boolean;
   year_to: boolean;
+  category: boolean;
   year_from: boolean;
-  spare_part: boolean;
   transmission: boolean;
 }

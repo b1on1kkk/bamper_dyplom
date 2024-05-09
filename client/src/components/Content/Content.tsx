@@ -1,6 +1,11 @@
-import { useReducer, useRef } from "react";
-import useClickOutside from "../../hooks/useClickOutside";
+import axios, { AxiosError } from "axios";
 
+import { useQuery } from "@tanstack/react-query";
+import useClickOutside from "../../hooks/useClickOutside";
+import { useEffect, useReducer, useRef, useState } from "react";
+
+import { ChevronRight } from "lucide-react";
+import { FilterInput } from "../FilterInput/FilterInput";
 import { FilterButton } from "../FilterButton/FilterButton";
 
 import { filterReducer } from "../../reducers/filterReducer";
@@ -12,9 +17,43 @@ import { checkChosen } from "../../utils/checkChosen";
 import { initialFilterState } from "../../constants/initialFilterState";
 import { initialOpenFilterState } from "../../constants/initialOpenFilterState";
 
+import type { Brands } from "../../interfaces/brands";
+import type { Models } from "../../interfaces/models";
 import { FilterActionKind } from "../../interfaces/filter";
+import type { FilterOpenState } from "../../interfaces/openFilter";
+
+import { BODY } from "../../constants/body";
+import { FUEL } from "../../constants/fuel";
+import { TRANSMISSION } from "../../constants/transmission";
+import { SPARE_PART_CATEGORY } from "../../constants/sparePartCategory";
+
+const useBrands = () => {
+  return useQuery<Array<Brands>, AxiosError>({
+    queryKey: ["brands"],
+    queryFn: async () => {
+      return await axios
+        .get("http://localhost:6969/brands/all")
+        .then((res) => res.data)
+        .catch((err) => err);
+    },
+    enabled: false
+  });
+};
+
+function findBrandModels(brands: Array<Brands>, brand_name: string) {
+  for (let i = 0; i < brands.length; i++) {
+    if (brands[i].name === brand_name) return brands[i].model;
+  }
+}
 
 export const Content = () => {
+  const { data, refetch } = useBrands();
+
+  const [models, setModels] = useState<Array<Models> | undefined>(undefined);
+  const [extendedFilter, setExtendedFilter] = useState<boolean>(false);
+
+  const blockRef = useRef<HTMLElement>(null);
+
   const [toFilterState, toFilterDispatch] = useReducer(
     filterReducer,
     initialFilterState
@@ -33,10 +72,19 @@ export const Content = () => {
     }
   };
 
-  const blockRef = useRef<HTMLElement>(null);
-  useClickOutside(blockRef, handleClickOutside);
+  useClickOutside<FilterOpenState>(
+    blockRef,
+    openFilterState,
+    handleClickOutside
+  );
 
-  const fakeArray = new Array(10).fill(0);
+  useEffect(() => {
+    if (toFilterState.brand && data) {
+      setModels(findBrandModels(data, toFilterState.brand));
+    }
+  }, [data, toFilterState.brand]);
+
+  console.log(toFilterState);
 
   return (
     <main className="flex">
@@ -50,25 +98,28 @@ export const Content = () => {
           </h1>
         </div>
 
-        <div className="flex gap-2 my-4 flex-col">
+        <div className="flex gap-2 mt-4 mb-2 flex-col">
           <div className="flex relative">
             <FilterButton
-              data={fakeArray}
+              data={data}
               descriptionType="small"
               buttonTitle="Марка а/м"
               value={toFilterState.brand}
               openStatus={openFilterState.brand}
-              onClear={() =>
+              onClear={() => {
                 toFilterDispatch({
                   type: FilterActionKind.BRAND,
                   payload: null
-                })
-              }
+                });
+                setModels(undefined);
+              }}
               onOpenMenu={() => {
                 openFilterDispatch({
                   type: FilterActionKind.BRAND,
                   payload: !openFilterState.brand
                 });
+
+                if (!openFilterState.brand === true) refetch();
               }}
               onSelectValue={(e) =>
                 toFilterDispatch({ type: FilterActionKind.BRAND, payload: e })
@@ -76,7 +127,7 @@ export const Content = () => {
             />
 
             <FilterButton
-              data={fakeArray}
+              data={models}
               descriptionType="small"
               buttonTitle="Модель а/м"
               value={toFilterState.model}
@@ -151,31 +202,194 @@ export const Content = () => {
           </div>
 
           <FilterButton
-            data={actualYears()}
+            data={SPARE_PART_CATEGORY}
             descriptionType="large"
             buttonTitle="Выбрать запчасть"
-            value={toFilterState.spare_part}
-            openStatus={openFilterState.spare_part}
+            value={toFilterState.category}
+            openStatus={openFilterState.category}
             onClear={() =>
               toFilterDispatch({
-                type: FilterActionKind.SPARE_PART,
+                type: FilterActionKind.CATEGORY,
                 payload: null
               })
             }
             onOpenMenu={() => {
               openFilterDispatch({
-                type: FilterActionKind.SPARE_PART,
-                payload: !openFilterState.spare_part
+                type: FilterActionKind.CATEGORY,
+                payload: !openFilterState.category
               });
             }}
             onSelectValue={(e) =>
               toFilterDispatch({
-                type: FilterActionKind.SPARE_PART,
+                type: FilterActionKind.CATEGORY,
                 payload: e
               })
             }
           />
+
+          <FilterInput
+            type="text"
+            value={toFilterState.spare_id}
+            onChange={(e) => {
+              toFilterDispatch({
+                type: FilterActionKind.SPARE_ID,
+                payload: e.target.value
+              });
+            }}
+            placeholder="Номер запчасти..."
+          />
+
+          <FilterInput
+            type="text"
+            value={toFilterState.article}
+            onChange={(e) => {
+              toFilterDispatch({
+                type: FilterActionKind.ARTICLE,
+                payload: e.target.value
+              });
+            }}
+            placeholder="Артикул объявления..."
+          />
         </div>
+
+        <div>
+          <button
+            className="text-sm text-primary_text/70 hover:text-primary_text flex items-center gap-1 transition-colors"
+            onClick={() => setExtendedFilter(!extendedFilter)}
+          >
+            <span>Больше параметров поиска</span>
+            <div
+              className={`${
+                extendedFilter ? "rotate-90" : "rotate-0"
+              } transition-transform`}
+            >
+              <ChevronRight width={13} height={13} />
+            </div>
+          </button>
+        </div>
+
+        {extendedFilter && (
+          <div className="flex gap-2 mt-2 flex-col animate-[slide-up_0.3s]">
+            <div className="flex relative">
+              <FilterInput
+                type="number"
+                value={toFilterState.engine_volume}
+                onChange={(e) => {
+                  toFilterDispatch({
+                    type: FilterActionKind.ENGINE_VOLUME,
+                    payload: e.target.value
+                  });
+                }}
+                placeholder="Объем: 1.6"
+              />
+
+              <FilterButton
+                data={FUEL}
+                buttonTitle="Топливо"
+                descriptionType="small"
+                value={toFilterState.fuel}
+                openStatus={openFilterState.fuel}
+                onClear={() =>
+                  toFilterDispatch({
+                    type: FilterActionKind.FUEL,
+                    payload: null
+                  })
+                }
+                onOpenMenu={() => {
+                  openFilterDispatch({
+                    type: FilterActionKind.FUEL,
+                    payload: !openFilterState.fuel
+                  });
+                }}
+                onSelectValue={(e) =>
+                  toFilterDispatch({
+                    type: FilterActionKind.FUEL,
+                    payload: e
+                  })
+                }
+              />
+            </div>
+
+            <div className="flex relative">
+              <FilterButton
+                data={TRANSMISSION}
+                buttonTitle="Коробка"
+                descriptionType="small"
+                value={toFilterState.transmission}
+                openStatus={openFilterState.transmission}
+                onClear={() =>
+                  toFilterDispatch({
+                    type: FilterActionKind.TRANSMISSION,
+                    payload: null
+                  })
+                }
+                onOpenMenu={() => {
+                  openFilterDispatch({
+                    type: FilterActionKind.TRANSMISSION,
+                    payload: !openFilterState.transmission
+                  });
+                }}
+                onSelectValue={(e) =>
+                  toFilterDispatch({
+                    type: FilterActionKind.TRANSMISSION,
+                    payload: e
+                  })
+                }
+              />
+
+              <FilterButton
+                data={BODY}
+                buttonTitle="Кузов"
+                descriptionType="small"
+                value={toFilterState.body}
+                openStatus={openFilterState.body}
+                onClear={() =>
+                  toFilterDispatch({
+                    type: FilterActionKind.BODY,
+                    payload: null
+                  })
+                }
+                onOpenMenu={() => {
+                  openFilterDispatch({
+                    type: FilterActionKind.BODY,
+                    payload: !openFilterState.body
+                  });
+                }}
+                onSelectValue={(e) =>
+                  toFilterDispatch({
+                    type: FilterActionKind.BODY,
+                    payload: e
+                  })
+                }
+              />
+            </div>
+
+            <div className="flex">
+              <FilterInput
+                type="number"
+                value={toFilterState.price_from}
+                onChange={(e) => {
+                  toFilterDispatch({
+                    type: FilterActionKind.PRICE_FROM,
+                    payload: e.target.value
+                  });
+                }}
+                placeholder="Цена от, руб"
+              />
+              <FilterInput
+                type="number"
+                value={toFilterState.price_to}
+                onChange={(e) => {
+                  toFilterDispatch({
+                    type: FilterActionKind.PRICE_TO,
+                    payload: e.target.value
+                  });
+                }}
+                placeholder="Цена до, руб"
+              />
+            </div>
+          </div>
+        )}
       </aside>
 
       <div className="flex-1 bg-primary_bg w-full p-3 shadow-lg rounded-md ml-[270px]">

@@ -1,12 +1,17 @@
 export enum FilterActionKind {
+  BODY = "BODY",
+  FUEL = "FUEL",
   BRAND = "BRAND",
   MODEL = "MODEL",
-  YEAR_FROM = "YEAR_FROM",
+  ARTICLE = "ARTICLE",
   YEAR_TO = "YEAR_TO",
-  SPARE_PART = "SPARE_PART",
-  FUEL = "FUEL",
+  SPARE_ID = "SPARE_ID",
+  CATEGORY = "CATEGORY",
+  PRICE_TO = "PRICE_TO",
+  YEAR_FROM = "YEAR_FROM",
+  PRICE_FROM = "PRICE_FROM",
   TRANSMISSION = "TRANSMISSION",
-  BODY = "BODY",
+  ENGINE_VOLUME = "ENGINE_VOLUME",
   INITIAL_STATE = "INITIAL_STATE"
 }
 
@@ -16,12 +21,17 @@ export interface FilterAction {
 }
 
 export interface FilterState {
+  body: string | null;
+  fuel: string | null;
   brand: string | null;
   model: string | null;
-  year_from: string | null;
+  article: string | null;
   year_to: string | null;
-  spare_part: string | null;
-  fuel: string | null;
+  price_to: string | null;
+  year_from: string | null;
+  category: string | null;
+  price_from: string | null;
   transmission: string | null;
-  body: string | null;
+  engine_volume: string | null;
+  spare_id: string | null;
 }

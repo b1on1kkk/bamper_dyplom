@@ -37,10 +37,10 @@ export function filterOpenReducer(
         year_to: payload
       };
 
-    case FilterActionKind.SPARE_PART:
+    case FilterActionKind.CATEGORY:
       return {
         ...initialOpenFilterState,
-        spare_part: payload
+        category: payload
       };
 
     case FilterActionKind.FUEL:

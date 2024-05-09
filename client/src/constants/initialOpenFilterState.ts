@@ -4,7 +4,7 @@ export const initialOpenFilterState = {
   brand: false,
   model: false,
   year_to: false,
+  category: false,
   year_from: false,
-  spare_part: false,
   transmission: false
 };

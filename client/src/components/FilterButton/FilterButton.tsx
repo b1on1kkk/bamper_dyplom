@@ -1,14 +1,17 @@
 import { ChevronDown, CircleX } from "lucide-react";
+import { Brands } from "../../interfaces/brands";
+import { useEffect, useState } from "react";
+import { Models } from "../../interfaces/models";
+import { ActualYears } from "../../interfaces/actualYears";
 
 type Description = "small" | "large";
 
 interface FilterButtonType {
-  data: Array<any>;
+  data: Array<Brands> | Array<Models> | Array<ActualYears> | undefined;
   buttonTitle: string;
   openStatus: boolean;
   value: string | null;
   descriptionType: Description;
-
   onClear: () => void;
   onOpenMenu: () => void;
   onSelectValue: (e: string) => void;
@@ -24,10 +27,34 @@ export const FilterButton = ({
   onOpenMenu,
   onSelectValue
 }: FilterButtonType) => {
+  const [fetchedData, setFetchedData] = useState<
+    Array<{ value: string; code: string }>
+  >([]);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const array: Array<{ value: string; code: string }> = [];
+      data.forEach((item) => array.push({ value: item.name, code: item.code }));
+
+      setFetchedData(array);
+    }
+
+    return () => {
+      setFetchedData([]);
+    };
+  }, [data]);
+
   return (
     <div className="relative flex-1 border-[1px] border-primary_border">
-      <button className="w-full" onClick={onOpenMenu}>
-        <div className="flex text-primary_text text-sm py-1 px-2 items-center">
+      <button
+        className="w-full hover:bg-primary_border transition-colors"
+        onClick={onOpenMenu}
+      >
+        <div
+          className={`flex ${
+            value ? "text-primary_text" : "text-primary_text/70"
+          }  text-sm py-1 px-2 items-center`}
+        >
           <div className="flex-1 w-0 text-start">
             <p className="overflow-hidden whitespace-nowrap text-ellipsis">
               {value ? value : buttonTitle}
@@ -58,9 +85,9 @@ export const FilterButton = ({
       </button>
       {openStatus && (
         <div
-          className={`absolute -left-[1px] w-[${
-            descriptionType === "small" ? 114 : 226
-          }px] h-[200px] bg-primary_bg overflow-auto z-10 flex animate-[slide-up_0.3s] flex-col shadow-lg text-white border-[1px] border-primary_border`}
+          className={`absolute -left-[1px] ${
+            descriptionType === "small" ? "w-[113px]" : "w-[226px]"
+          } max-h-[200px] bg-primary_bg overflow-auto z-50 flex animate-[slide-up_0.3s] flex-col drop-shadow-lg text-white border-[1px] border-primary_border`}
         >
           <div className="p-1 border-b-[1px]">
             <input
@@ -70,21 +97,30 @@ export const FilterButton = ({
             />
           </div>
           <ul className="w-full">
-            {data.map(() => {
-              return (
-                <li className="flex hover:bg-indigo-400 text-sm transition-colors">
-                  <button
-                    className="w-full flex p-2"
-                    onClick={() => {
-                      onOpenMenu();
-                      onSelectValue("Audi");
-                    }}
-                  >
-                    BMW
-                  </button>
-                </li>
-              );
-            })}
+            {fetchedData.length > 0 ? (
+              <>
+                {fetchedData.map((item, idx) => {
+                  return (
+                    <li
+                      className="flex hover:bg-indigo-400 text-sm transition-colors"
+                      key={idx}
+                    >
+                      <button
+                        className="w-full flex p-2 text-start"
+                        onClick={() => {
+                          onOpenMenu();
+                          onSelectValue(item.value);
+                        }}
+                      >
+                        {item.value}
+                      </button>
+                    </li>
+                  );
+                })}
+              </>
+            ) : (
+              <li className="text-sm m-2">Совпадения не найдены</li>
+            )}
           </ul>
         </div>
       )}

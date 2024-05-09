@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-
-const useClickOutside = (
+const useClickOutside = <T>(
   ref: React.RefObject<HTMLElement>,
+  dependency: T,
   callback: () => void
 ) => {
   const handleClick = (e: MouseEvent) => {
@@ -16,7 +16,7 @@ const useClickOutside = (
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [ref]);
+  }, [ref, dependency]);
 };
 
 export default useClickOutside;

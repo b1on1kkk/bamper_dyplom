@@ -2,11 +2,15 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
+import cors from "cors";
+
 import brandsRouter from "./routes/brands";
 import sparePartsRouter from "./routes/spare_parts";
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
+
+app.use(cors());
 
 app.use("/brands", brandsRouter);
 app.use("/spare_parts", sparePartsRouter);
