@@ -10,7 +10,11 @@ import sparePartsRouter from "./routes/spare_parts";
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    exposedHeaders: "total_count"
+  })
+);
 
 app.use("/brands", brandsRouter);
 app.use("/spare_parts", sparePartsRouter);

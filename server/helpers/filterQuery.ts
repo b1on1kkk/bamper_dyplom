@@ -95,7 +95,7 @@ export const filterQuery = (enabledFilters: randObjKeys) => {
 
   if (enabledFilters.price_from && enabledFilters.price_to) {
     usedFilter.where.AND.push({
-      year: {
+      price: {
         gte: +enabledFilters.price_from,
         lt: +enabledFilters.price_to
       }

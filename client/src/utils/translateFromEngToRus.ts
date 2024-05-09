@@ -1,0 +1,54 @@
+export function translateFromEngToRus(data: string) {
+  switch (data) {
+    case "sedan":
+      return "седан";
+    case "hatchback":
+      return "хэтчбек";
+    case "universal":
+      return "универсал";
+    case "suv":
+      return "внедорожник";
+    case "minivan":
+      return "минивэн";
+    case "coupe":
+      return "купе";
+    case "liftback":
+      return "лифтбек";
+    case "pickup":
+      return "пикап";
+    case "convertible":
+      return "кабриолет";
+    case "van":
+      return "фургон";
+    case "truck":
+      return "грузовик";
+    case "flatbed":
+      return "бортовой";
+    case "tractor":
+      return "трактор";
+    case "bus":
+      return "автобус";
+    case "trailer":
+      return "прицеп";
+    case "semi_trailer":
+      return "полуприцеп";
+    case "forklift":
+      return "погрузчик";
+    case "gasoline":
+      return "бензин";
+    case "hybrid":
+      return "гибрид";
+    case "diesel":
+      return "дизель";
+    case "electric":
+      return "электро";
+    case "automatic":
+      return "АКПП";
+    case "manual":
+      return "МКПП";
+    case "cvt":
+      return "вариатор";
+    case "robotized":
+      return "робот";
+  }
+}

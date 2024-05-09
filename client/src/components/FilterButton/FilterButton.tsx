@@ -10,11 +10,11 @@ interface FilterButtonType {
   data: Array<Brands> | Array<Models> | Array<ActualYears> | undefined;
   buttonTitle: string;
   openStatus: boolean;
-  value: string | null;
+  value: { name: string; code: string } | null;
   descriptionType: Description;
   onClear: () => void;
   onOpenMenu: () => void;
-  onSelectValue: (e: string) => void;
+  onSelectValue: (e: { name: string; code: string }) => void;
 }
 
 export const FilterButton = ({
@@ -57,7 +57,7 @@ export const FilterButton = ({
         >
           <div className="flex-1 w-0 text-start">
             <p className="overflow-hidden whitespace-nowrap text-ellipsis">
-              {value ? value : buttonTitle}
+              {value ? value.name : buttonTitle}
             </p>
           </div>
           <div className="flex gap-1">
@@ -109,7 +109,7 @@ export const FilterButton = ({
                         className="w-full flex p-2 text-start"
                         onClick={() => {
                           onOpenMenu();
-                          onSelectValue(item.value);
+                          onSelectValue({ name: item.value, code: item.code });
                         }}
                       >
                         {item.value}

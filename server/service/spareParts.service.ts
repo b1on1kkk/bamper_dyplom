@@ -18,9 +18,21 @@ export class SparePartsService {
     // возможные фильтры
     const enabledFilters = checkFilteringQuery(req);
 
-    return await this.prisma.spare_parts.findMany({
-      ...filterQuery(enabledFilters),
-      select: GET_ALL_SELECT
-    });
+    // think about error handler
+    const { page } = req.query;
+    const limit = 20;
+    const toSkip = (+page! - 1) * limit;
+
+    return {
+      data: await this.prisma.spare_parts.findMany({
+        skip: toSkip,
+        take: limit,
+        ...filterQuery(enabledFilters),
+        select: GET_ALL_SELECT
+      }),
+      elements: await this.prisma.spare_parts.count({
+        where: filterQuery(enabledFilters).where // Apply the same filter used for data
+      })
+    };
   }
 }

@@ -17,21 +17,21 @@ export enum FilterActionKind {
 
 export interface FilterAction {
   type: FilterActionKind;
-  payload: string | null;
+  payload: { name: string; code: string } | null;
 }
 
 export interface FilterState {
-  body: string | null;
-  fuel: string | null;
-  brand: string | null;
-  model: string | null;
-  article: string | null;
-  year_to: string | null;
-  price_to: string | null;
-  year_from: string | null;
-  category: string | null;
-  price_from: string | null;
-  transmission: string | null;
-  engine_volume: string | null;
-  spare_id: string | null;
+  body: { name: string; code: string } | null;
+  fuel: { name: string; code: string } | null;
+  brand: { name: string; code: string } | null;
+  model: { name: string; code: string } | null;
+  article: { name: string; code: string } | null;
+  year_to: { name: string; code: string } | null;
+  price_to: { name: string; code: string } | null;
+  spare_id: { name: string; code: string } | null;
+  category: { name: string; code: string } | null;
+  year_from: { name: string; code: string } | null;
+  price_from: { name: string; code: string } | null;
+  transmission: { name: string; code: string } | null;
+  engine_volume: { name: string; code: string } | null;
 }
