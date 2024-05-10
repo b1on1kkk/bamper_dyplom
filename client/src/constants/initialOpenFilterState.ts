@@ -1,4 +1,15 @@
-export const initialOpenFilterState = {
+export interface OpenFilterState {
+  body: boolean;
+  fuel: boolean;
+  brand: boolean;
+  model: boolean;
+  year_to: boolean;
+  category: boolean;
+  year_from: boolean;
+  transmission: boolean;
+}
+
+export const openFilterState = {
   body: false,
   fuel: false,
   brand: false,

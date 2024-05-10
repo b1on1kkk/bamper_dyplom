@@ -1,10 +1,3 @@
-import { FilterActionKind } from "./filter";
-
-export interface FilterOpenAction {
-  payload: boolean;
-  type: FilterActionKind;
-}
-
 export interface FilterOpenState {
   body: boolean;
   fuel: boolean;

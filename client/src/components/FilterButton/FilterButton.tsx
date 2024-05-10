@@ -1,28 +1,17 @@
-import { ChevronDown, CircleX } from "lucide-react";
-import { Brands } from "../../interfaces/brands";
 import { useEffect, useState } from "react";
-import { Models } from "../../interfaces/models";
-import { ActualYears } from "../../interfaces/actualYears";
 
-type Description = "small" | "large";
+import { ChevronDown, CircleX } from "lucide-react";
 
-interface FilterButtonType {
-  data: Array<Brands> | Array<Models> | Array<ActualYears> | undefined;
-  buttonTitle: string;
-  openStatus: boolean;
-  value: { name: string; code: string } | null;
-  descriptionType: Description;
-  onClear: () => void;
-  onOpenMenu: () => void;
-  onSelectValue: (e: { name: string; code: string }) => void;
-}
+import type { FilterButtonType } from "../../interfaces/filterButtonType";
 
 export const FilterButton = ({
   data,
   value,
+  filterType,
+  openStatus,
   buttonTitle,
   descriptionType,
-  openStatus,
+
   onClear,
   onOpenMenu,
   onSelectValue
@@ -47,13 +36,14 @@ export const FilterButton = ({
   return (
     <div className="relative flex-1 border-[1px] border-primary_border">
       <button
+        id={`${filterType}_button`}
         className="w-full hover:bg-primary_border transition-colors"
-        onClick={onOpenMenu}
+        onClick={() => onOpenMenu({ attribute: filterType })}
       >
         <div
           className={`flex ${
-            value ? "text-primary_text" : "text-primary_text/70"
-          }  text-sm py-1 px-2 items-center`}
+            value ? "text-primary_text" : "text-primary_text/50"
+          } text-sm py-1 px-2 items-center`}
         >
           <div className="flex-1 w-0 text-start">
             <p className="overflow-hidden whitespace-nowrap text-ellipsis">
@@ -73,7 +63,10 @@ export const FilterButton = ({
               <div
                 onClick={(e) => {
                   e.stopPropagation();
-                  onClear();
+                  onClear({
+                    data: null,
+                    attribute: filterType
+                  });
                 }}
                 className="z-10"
               >
@@ -108,8 +101,11 @@ export const FilterButton = ({
                       <button
                         className="w-full flex p-2 text-start"
                         onClick={() => {
-                          onOpenMenu();
-                          onSelectValue({ name: item.value, code: item.code });
+                          onOpenMenu({ attribute: filterType });
+                          onSelectValue({
+                            data: { name: item.value, code: item.code },
+                            attribute: filterType
+                          });
                         }}
                       >
                         {item.value}

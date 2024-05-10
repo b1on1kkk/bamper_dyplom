@@ -2,7 +2,7 @@ import { createSearchParams } from "react-router-dom";
 
 import type { FilterState } from "../interfaces/filter";
 
-export function searchParams(filter: FilterState) {
+export function searchQueryParams(filter: FilterState) {
   const newFilter: { [key: string]: string } = {};
 
   for (const [key, value] of Object.entries(filter)) {

@@ -14,8 +14,7 @@ const useBrands = () => {
         .get(`${ROOT}brands/all`)
         .then((res) => res.data)
         .catch((err) => err);
-    },
-    enabled: false
+    }
   });
 };
 

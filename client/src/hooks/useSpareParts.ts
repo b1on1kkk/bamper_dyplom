@@ -5,26 +5,25 @@ import { useQuery } from "@tanstack/react-query";
 import { ROOT } from "../constants/root";
 
 import type { SparePartsType } from "../interfaces/sparePartsType";
+import { useLocation } from "react-router-dom";
 
 const useSpareParts = (
   page: number,
-  filter: string,
-  setPages: (c: number) => void
+  setNumberOfElements: (c: number) => void
 ) => {
-  return useQuery<Array<SparePartsType>, AxiosError>({
+  const location = useLocation();
+
+  return useQuery<SparePartsType, AxiosError>({
     queryKey: ["spare_parts"],
-    queryFn: async () =>
-      await axios
-        .get(
-          `${ROOT}spare_parts${
-            filter ? `${filter}&page=${page}` : `?page=${page}`
-          }`
-        )
-        .then((res) => {
-          setPages(+res.headers["total_count"]);
-          return res.data;
-        })
-        .catch((err) => err)
+    queryFn: async () => {
+      const response = await axios.get(
+        `${ROOT}spare_parts${
+          location.search ? `${location.search}&page=${page}` : `?page=${page}`
+        }`
+      );
+      setNumberOfElements(+response.headers["total_count"]);
+      return response.data;
+    }
   });
 };
 

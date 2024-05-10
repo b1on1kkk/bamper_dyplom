@@ -20,19 +20,45 @@ export class SparePartsService {
 
     // think about error handler
     const { page } = req.query;
-    const limit = 20;
-    const toSkip = (+page! - 1) * limit;
 
-    return {
-      data: await this.prisma.spare_parts.findMany({
-        skip: toSkip,
-        take: limit,
-        ...filterQuery(enabledFilters),
-        select: GET_ALL_SELECT
-      }),
-      elements: await this.prisma.spare_parts.count({
-        where: filterQuery(enabledFilters).where // Apply the same filter used for data
-      })
-    };
+    try {
+      if (page) {
+        const limit = 20;
+        const toSkip = (+page - 1) * limit;
+
+        return {
+          data: await this.prisma.spare_parts.findMany({
+            skip: toSkip,
+            take: limit,
+            ...filterQuery(enabledFilters),
+            select: GET_ALL_SELECT
+          }),
+          elements: await this.prisma.spare_parts.count({
+            where: filterQuery(enabledFilters).where
+          }),
+          status: 200,
+          message: "Successfully"
+        };
+      }
+
+      return {
+        data: await this.prisma.spare_parts.findMany({
+          ...filterQuery(enabledFilters),
+          select: GET_ALL_SELECT
+        }),
+        elements: await this.prisma.spare_parts.count({
+          where: filterQuery(enabledFilters).where
+        }),
+        status: 200,
+        message: "Successfully"
+      };
+    } catch (error) {
+      return {
+        data: [],
+        elements: 0,
+        status: 500,
+        message: "Error occured! Please try later"
+      };
+    }
   }
 }

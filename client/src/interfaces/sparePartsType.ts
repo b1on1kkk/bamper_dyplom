@@ -1,4 +1,4 @@
-export interface SparePartsType {
+export interface Parts {
   article: number;
   body: string;
   category: string;
@@ -11,4 +11,10 @@ export interface SparePartsType {
   title: string;
   transmission: string;
   year: number;
+}
+
+export interface SparePartsType {
+  status: number;
+  message: string;
+  data: Array<Parts>;
 }

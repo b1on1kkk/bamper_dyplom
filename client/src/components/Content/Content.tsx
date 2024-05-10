@@ -3,75 +3,34 @@ import { useLocation } from "react-router-dom";
 import useSpareParts from "../../hooks/useSpareParts";
 
 import { Aside } from "./Aside/Aside";
-import { Pagination, Spinner } from "@nextui-org/react";
-import { SparePartCard } from "../SparePartCard/SparePartCard";
+import { MainContent } from "./MainContent/MainContent";
+
+import { MyGlobalContext } from "../../context/MyGlobalContext";
 
 export const Content = () => {
   const location = useLocation();
 
-  console.log(location);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [numberOfElements, setNumberOfElements] = useState<number>(0);
 
-  // think and optimize it
-  const [page, setPage] = useState<number>(1);
-  const [pages, setPages] = useState<number>(0);
-
-  const { data, refetch, isLoading } = useSpareParts(
-    page,
-    location.search,
-    setPages
+  const { data, refetch, isLoading, isError } = useSpareParts(
+    currentPage,
+    setNumberOfElements
   );
 
   useEffect(() => {
     refetch();
-  }, [location.search, page]);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
+  }, [location.search, currentPage]);
 
   return (
     <main className="flex">
-      <Aside />
-
-      <div
-        className={`flex-1 bg-primary_bg w-full p-3 shadow-lg rounded-md ml-[270px] min-h-[500px] flex ${
-          isLoading ? "justify-center" : "justify-normal"
-        } flex-col`}
+      <MyGlobalContext.Provider
+        value={{ numberOfElements, currentPage, setCurrentPage }}
       >
-        {!isLoading ? (
-          <main className="flex flex-col flex-1">
-            {data && data.length > 0 ? (
-              <>
-                {data.map((item) => {
-                  return <SparePartCard item={item}></SparePartCard>;
-                })}
-              </>
-            ) : (
-              <div className="text-center text-2xl text-primary_text">
-                Объявления не найдены
-              </div>
-            )}
-          </main>
-        ) : (
-          <Spinner color="primary" />
-        )}
+        <Aside />
 
-        <div className="flex py-5 justify-center">
-          <Pagination
-            total={pages}
-            size="sm"
-            variant="light"
-            page={page}
-            onChange={(e) => {
-              scrollToTop();
-              setPage(e);
-            }}
-          />
-        </div>
-      </div>
+        <MainContent isLoading={isLoading} isError={isError} parts={data} />
+      </MyGlobalContext.Provider>
     </main>
   );
 };

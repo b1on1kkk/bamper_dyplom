@@ -9,9 +9,13 @@ sparePartsRouter.get("/", async (req: Request, res: Response) => {
   const response = await service.getAllSpareParts(req);
 
   return res
-    .status(200)
-    .setHeader("total_count", Math.ceil(response.elements / 20).toString())
-    .json(response.data);
+    .status(response.status)
+    .setHeader("total_count", response.elements)
+    .json({
+      status: response.status,
+      message: response.message,
+      data: response.data
+    });
 });
 
 export default sparePartsRouter;

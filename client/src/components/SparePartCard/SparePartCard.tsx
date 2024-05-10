@@ -2,18 +2,18 @@ import { CarFront } from "lucide-react";
 
 import { translateFromEngToRus } from "../../utils/translateFromEngToRus";
 
-import type { SparePartsType } from "../../interfaces/sparePartsType";
+import type { Parts } from "../../interfaces/sparePartsType";
 
-export const SparePartCard = ({ item }: { item: SparePartsType }) => {
+export const SparePartCard = ({ item }: { item: Parts }) => {
   return (
     <div
-      className="flex h-[200px] gap-5 p-3 border-b-[1px] border-primary_border animate-[slide-up_0.3s]"
+      className="flex h-[200px] gap-5 p-3 border-b-[1px] border-primary_border animate-[slide-up_0.3s] overflow-hidden"
       key={item.article}
     >
       <div className="p-2 border-[1px] border-primary_border rounded-md">
         <img
           src={item.img_link}
-          alt={item.title}
+          alt={item.category}
           className="w-full h-full object-cover rounded-md"
         />
       </div>
