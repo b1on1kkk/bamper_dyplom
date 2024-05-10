@@ -1,6 +1,6 @@
-import type { Brands } from "./brands";
 import type { Models } from "./models";
 import type { FilterBy } from "./filter";
+import type { Brands } from "./brands";
 import type { FilterType } from "./filterType";
 import type { ActualYears } from "./actualYears";
 

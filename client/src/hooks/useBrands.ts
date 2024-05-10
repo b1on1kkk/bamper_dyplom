@@ -2,12 +2,12 @@ import axios, { AxiosError } from "axios";
 
 import { useQuery } from "@tanstack/react-query";
 
-import type { Brands } from "../interfaces/brands";
+import type { BrandsAllData } from "../interfaces/brands";
 
 import { ROOT } from "../constants/root";
 
 const useBrands = () => {
-  return useQuery<Array<Brands>, AxiosError>({
+  return useQuery<BrandsAllData, AxiosError>({
     queryKey: ["brands"],
     queryFn: async () => {
       return await axios

@@ -19,12 +19,18 @@ export const FilterButton = ({
   const [fetchedData, setFetchedData] = useState<
     Array<{ value: string; code: string }>
   >([]);
+  const [cache, setCache] = useState<Array<{ value: string; code: string }>>(
+    []
+  );
+
+  const [searchInput, setSearchInput] = useState<string>("");
 
   useEffect(() => {
     if (data && data.length > 0) {
       const array: Array<{ value: string; code: string }> = [];
       data.forEach((item) => array.push({ value: item.name, code: item.code }));
 
+      setCache(array);
       setFetchedData(array);
     }
 
@@ -32,6 +38,19 @@ export const FilterButton = ({
       setFetchedData([]);
     };
   }, [data]);
+
+  useEffect(() => {
+    if (searchInput) {
+      setFetchedData([
+        ...fetchedData.filter((item) =>
+          item.value
+            .toLowerCase()
+            .replace(/\s/g, "")
+            .includes(searchInput.toLowerCase().replace(/\s/g, ""))
+        )
+      ]);
+    }
+  }, [searchInput]);
 
   return (
     <div className="relative flex-1 border-[1px] border-primary_border">
@@ -85,8 +104,13 @@ export const FilterButton = ({
           <div className="p-1 border-b-[1px]">
             <input
               type="text"
-              className="w-full outline-none placeholder:text-sm text-sm bg-inherit"
+              value={searchInput}
               placeholder="Искать..."
+              className="w-full outline-none placeholder:text-sm text-sm bg-inherit"
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Backspace") setFetchedData(cache);
+              }}
             />
           </div>
           <ul className="w-full">

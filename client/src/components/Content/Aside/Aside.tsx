@@ -32,9 +32,9 @@ import { FilterBy, FilterState } from "../../../interfaces/filter";
 export const Aside = () => {
   const navigate = useNavigate();
 
-  const blockRef = useRef<HTMLElement>(null);
-  const { data } = useBrands();
+  const { data: brands } = useBrands();
   const [searchParams] = useSearchParams();
+  const blockRef = useRef<HTMLElement>(null);
 
   const { numberOfElements, setCurrentPage } = useGlobalContext();
 
@@ -112,10 +112,10 @@ export const Aside = () => {
   // мемоизируем
   const memoizedActualYears = useMemo(() => actualYears(), []);
   const memoizedFindBrandModels = useMemo(() => {
-    if (initialFilterState.brand && data) {
-      return findBrandModels(data, initialFilterState.brand.name);
+    if (initialFilterState.brand && brands) {
+      return findBrandModels(brands.data, initialFilterState.brand.name);
     }
-  }, [data, initialFilterState.brand]);
+  }, [brands, initialFilterState.brand]);
 
   // в зависимости от выбранной марки автомобиля, устанавливаем все его существующие модели
   useEffect(() => {
@@ -123,10 +123,12 @@ export const Aside = () => {
   }, [memoizedFindBrandModels]);
 
   useEffect(() => {
-    if (data) {
-      setInitialFilterState(changeInitialState(searchParams, data, models));
+    if (brands) {
+      setInitialFilterState(
+        changeInitialState(searchParams, brands.data, models)
+      );
     }
-  }, [data, models]);
+  }, [brands, models]);
 
   return (
     <aside
@@ -142,7 +144,7 @@ export const Aside = () => {
       <div className="flex gap-2 mt-4 mb-2 flex-col">
         <div className="flex relative">
           <FilterButton
-            data={data}
+            data={brands?.data}
             filterType="brand"
             descriptionType="small"
             buttonTitle="Марка а/м"
