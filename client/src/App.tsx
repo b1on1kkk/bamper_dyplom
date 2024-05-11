@@ -1,8 +1,15 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Main } from "./components/Main/Main";
+import router from "./router/router";
+import { RouterProvider } from "react-router-dom";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import useLocalStorage from "./hooks/useLocalStorage";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { NextUIProvider } from "@nextui-org/react";
+
+import { CartContext } from "./context/CartContext";
+
+import type { Parts } from "./interfaces/sparePartsType";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,15 +21,17 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  const { storedValues: cart, setValue: setCart } = useLocalStorage<
+    Array<Parts>
+  >("cart", []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <NextUIProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Main />} />
-          </Routes>
-        </Router>
-      </NextUIProvider>
+      <CartContext.Provider value={{ cart, setCart }}>
+        <NextUIProvider>
+          <RouterProvider router={router} />
+        </NextUIProvider>
+      </CartContext.Provider>
     </QueryClientProvider>
   );
 }

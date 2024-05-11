@@ -1,10 +1,14 @@
-import { CarFront } from "lucide-react";
+import useCartContext from "../../hooks/useCartContext";
+
+import { CarFront, Plus, X } from "lucide-react";
 
 import { translateFromEngToRus } from "../../utils/translateFromEngToRus";
 
 import type { Parts } from "../../interfaces/sparePartsType";
 
 export const SparePartCard = ({ item }: { item: Parts }) => {
+  const { cart, setCart } = useCartContext();
+
   return (
     <div
       className="flex h-[200px] gap-5 p-3 border-b-[1px] border-primary_border animate-[slide-up_0.3s] overflow-hidden"
@@ -57,15 +61,47 @@ export const SparePartCard = ({ item }: { item: Parts }) => {
         </div>
       </div>
 
-      <div className="ml-5 text-end">
-        <div className="text-primary_text text-2xl mb-2">
-          <span>{item.price} р.</span>
+      <div className="ml-5 text-end flex flex-col">
+        <div className="flex-1">
+          <div className="text-primary_text text-2xl mb-2">
+            <span>{item.price} р.</span>
+          </div>
+          <div className="text-primary_text/50 text-sm">
+            <span>~{Math.round(item.price / 3)}$</span>
+          </div>
+          <div className="text-primary_text/50 text-sm">
+            <span>~{Math.round(item.price * 27)}₽</span>
+          </div>
         </div>
-        <div className="text-primary_text/50 text-sm">
-          <span>~{Math.round(item.price / 3)}$</span>
-        </div>
-        <div className="text-primary_text/50 text-sm">
-          <span>~{Math.round(item.price * 27)}₽</span>
+        <div>
+          {cart.some(
+            (cart_item) => JSON.stringify(cart_item) === JSON.stringify(item)
+          ) ? (
+            <button
+              title="Удалить из корзины"
+              className="p-2 text-white hover:bg-red-500 rounded-lg transition-colors bg-gray-600 active:translate-y-[2px] drop-shadow-md active:drop-shadow-none"
+              onClick={() =>
+                setCart([
+                  ...cart.filter(
+                    (cart_item) =>
+                      JSON.stringify(cart_item) !== JSON.stringify(item)
+                  )
+                ])
+              }
+            >
+              <X width={18} height={18} />
+            </button>
+          ) : (
+            <>
+              <button
+                title="Добавить в корзину"
+                className="p-2 text-white hover:bg-green-500 rounded-lg transition-colors bg-gray-600 active:translate-y-[2px] drop-shadow-md active:drop-shadow-none"
+                onClick={() => setCart([...cart, item])}
+              >
+                <Plus width={18} height={18} />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
