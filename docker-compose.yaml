@@ -14,9 +14,7 @@ services:
       - app-network
 
   api:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: b1on1kkk/bamper_api
     container_name: api
     working_dir: /app
     ports:
