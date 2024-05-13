@@ -6,7 +6,13 @@ const brandsRouter = Router();
 const service = new BrandsService();
 
 brandsRouter.get("/all", async (_, res: Response) => {
-  return res.json(await service.allBrands());
+  const response = await service.allBrands();
+
+  return res.status(response.status).json({
+    status: response.status,
+    message: response.message,
+    data: response.data
+  });
 });
 
 export default brandsRouter;

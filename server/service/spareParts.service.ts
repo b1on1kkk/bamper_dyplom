@@ -53,6 +53,8 @@ export class SparePartsService {
         message: "Successfully"
       };
     } catch (error) {
+      console.log(error);
+
       return {
         data: [],
         elements: 0,

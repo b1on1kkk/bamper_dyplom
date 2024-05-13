@@ -25,9 +25,9 @@ export class BrandsService {
           }
         })
       };
-
-      return;
     } catch (error) {
+      console.log(error);
+
       return {
         data: [],
         elements: 0,

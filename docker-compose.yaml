@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  db:
+    image: b1on1kkk/bamper_mysql
+    container_name: mysql_db
+    tty: true
+    ports:
+      - "3316:3306"
+    environment:
+      MYSQL_DATABASE: bamper
+      MYSQL_ROOT_PASSWORD: root123
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+# Docker Networks
+networks:
+  app-network:
+    driver: bridge
