@@ -3,3 +3,4 @@ server/prisma
 
 client/node_modules
 client/README.md
+client/dist

@@ -15,12 +15,20 @@ services:
 
   api:
     image: b1on1kkk/bamper_api
-    container_name: api
     working_dir: /app
     ports:
       - "4000:4000"
     depends_on:
       - db
+    networks:
+      - app-network
+
+  client:
+    image: b1on1kkk/client_app
+    ports:
+      - 8080:8080
+    depends_on:
+      - api
     networks:
       - app-network
 
