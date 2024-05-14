@@ -14,7 +14,11 @@ Small project, with basic filtration, basket and pagination to show my programmi
 
 Clone this repo, enter command below and build project localy on you machine. 
 
-> [!IMPORTANT]
+
+> [!NOTE]
+> [Here](https://drive.google.com/drive/folders/17DJ-PAcTLcp8jQvKT8CsQLYrtk6mv3y4) you can see recording how this app actually works
+
+> [!TIP]
 >
 > This solution works only and only when you have installed Docker engine on you machine.
 
