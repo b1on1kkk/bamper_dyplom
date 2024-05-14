@@ -1,4 +1,4 @@
-## To start this project locally
+## To run this project locally
 
 Clone this repo, enter command below and build project localy on you machine. 
 
