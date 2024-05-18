@@ -1,1 +1,1 @@
-export const ROOT = "http://localhost:4000/";
+export const ROOT = "https://bamper-dyplom-api.onrender.com/";
