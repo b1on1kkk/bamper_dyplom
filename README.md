@@ -3,7 +3,7 @@
 
 ## To run this project locally
 
-Clone this repo, enter command below and build project localy on you machine. 
+Clone this repo, enter command below to start your project locally. 
 
 > [!NOTE]
 > [Here](https://drive.google.com/drive/folders/17DJ-PAcTLcp8jQvKT8CsQLYrtk6mv3y4) you can see recording how this app actually works
