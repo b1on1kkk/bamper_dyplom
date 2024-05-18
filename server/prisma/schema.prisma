@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -21,7 +21,7 @@ model model {
   brand_id    Int
   name        String        @db.VarChar(255)
   code        String        @db.VarChar(255)
-  brand       brand         @relation(fields: [brand_id], references: [id], onUpdate: Restrict, map: "model_ibfk_1")
+  brand       brand         @relation(fields: [brand_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "model_ibfk_1")
   spare_parts spare_parts[]
 
   @@index([brand_id], map: "brand_id")
@@ -43,8 +43,8 @@ model spare_parts {
   fuel          spare_parts_fuel?
   transmission  spare_parts_transmission?
   engine_volume Int?
-  brand         brand                     @relation(fields: [brand_id], references: [id], onUpdate: Restrict, map: "spare_parts_ibfk_1")
-  model         model                     @relation(fields: [model_id], references: [id], onUpdate: Restrict, map: "spare_parts_ibfk_2")
+  brand         brand                     @relation(fields: [brand_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spare_parts_ibfk_1")
+  model         model                     @relation(fields: [model_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spare_parts_ibfk_2")
 
   @@index([brand_id], map: "brand_id")
   @@index([model_id], map: "model_id")

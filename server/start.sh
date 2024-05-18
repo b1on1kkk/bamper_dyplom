@@ -10,9 +10,7 @@ done
 echo "Database server is ready."
 
 # Run the migration
-
 prisma db pull
-
 prisma generate
 
 echo "Migration completed."

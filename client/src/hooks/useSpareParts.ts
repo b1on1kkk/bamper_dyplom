@@ -1,11 +1,11 @@
 import axios, { AxiosError } from "axios";
 
+import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { ROOT } from "../constants/root";
 
 import type { SparePartsType } from "../interfaces/sparePartsType";
-import { useLocation } from "react-router-dom";
 
 const useSpareParts = (
   page: number,
@@ -14,7 +14,7 @@ const useSpareParts = (
   const location = useLocation();
 
   return useQuery<SparePartsType, AxiosError>({
-    queryKey: ["spare_parts"],
+    queryKey: ["spare_parts", location.search, page],
     queryFn: async () => {
       const response = await axios.get(
         `${ROOT}spare_parts${
@@ -23,7 +23,8 @@ const useSpareParts = (
       );
       setNumberOfElements(+response.headers["total_count"]);
       return response.data;
-    }
+    },
+    staleTime: 0
   });
 };
 
