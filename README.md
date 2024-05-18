@@ -2,7 +2,7 @@
 
 STACK: React + RtkQuery + TypeScript /// NodeJS + Express + Prisma + MySQL
 
-Small project, with basic filtration, basket and pagination to show my programming skills
+Small project, with basic filtration, basket and pagination
 
 ![image](https://github.com/b1on1kkk/bamper_dyplom/assets/114521829/2cbe9f8c-cb3e-4a34-a793-6989a9611ab3)
 
