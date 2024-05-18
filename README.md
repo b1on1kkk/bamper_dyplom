@@ -1,5 +1,5 @@
 ## Access to project
-[Here](https://drive.google.com/drive/folders/17DJ-PAcTLcp8jQvKT8CsQLYrtk6mv3y4) you can see deployed project
+[Here](https://bamper-dyplom.onrender.com) you can see deployed project
 
 ## To run this project locally
 
